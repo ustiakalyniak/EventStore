@@ -20,8 +20,8 @@ public class EventStoreDbContextFactory
         var optionsBuilder =
             new DbContextOptionsBuilder<EventStoreDbContext>();
 
-        optionsBuilder.UseSqlServer(
-            "Server=(localdb)\\MSSQLLocalDB;Database=EventStoreDb;Trusted_Connection=True;TrustServerCertificate=True;");
+        optionsBuilder.UseNpgsql(
+            "Host=localhost;Port=5432;Database=EventStoreDb;Username=postgres;Password=2222;");
 
         return new EventStoreDbContext(optionsBuilder.Options);
     }

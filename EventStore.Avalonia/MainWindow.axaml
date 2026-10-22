@@ -1,0 +1,89 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:EventStore.Avalonia.ViewModels"
+        x:Class="EventStore.Avalonia.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="EventStore"
+        Height="600"
+        Width="950"
+        WindowStartupLocation="CenterScreen"
+        Background="#F7F8FC">
+
+    <Grid Margin="24" RowDefinitions="Auto,Auto,*,Auto">
+        <!-- Заголовок -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="EventStore"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="#5B61D6"/>
+            <TextBlock Text="Керування та планування подій"
+                       FontSize="13"
+                       Foreground="#73788C"
+                       Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- Кнопки керування -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12" Margin="0,0,0,16">
+            <Button Content="Створити подію"
+                    Command="{Binding CreateEventCommand}"
+                    Width="160"
+                    Height="38"
+                    Background="#5B61D6"
+                    Foreground="White"
+                    FontWeight="SemiBold"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"/>
+
+            <Button Content="Редагувати обрану"
+                    Command="{Binding EditEventCommand}"
+                    Width="160"
+                    Height="38"
+                    Background="#4E5180"
+                    Foreground="White"
+                    FontWeight="SemiBold"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"/>
+
+            <Button Content="Оновити список"
+                    Command="{Binding LoadEventsCommand}"
+                    Width="140"
+                    Height="38"
+                    Background="White"
+                    BorderBrush="#D9DDEA"
+                    BorderThickness="1"
+                    Foreground="#42475B"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Таблиця подій -->
+        <Border Grid.Row="2"
+                Background="White"
+                CornerRadius="8"
+                Padding="12"
+                BorderBrush="#E3E6F0"
+                BorderThickness="1">
+            <DataGrid ItemsSource="{Binding Events}"
+                      SelectedItem="{Binding SelectedEvent}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      GridLinesVisibility="Horizontal">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Назва" Binding="{Binding Name}" Width="*" />
+                    <DataGridTextColumn Header="Дата" Binding="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}" Width="120" />
+                    <DataGridTextColumn Header="Тип" Binding="{Binding EventType}" Width="130" />
+                    <DataGridTextColumn Header="Гостей" Binding="{Binding GuestsCount}" Width="90" />
+                    <DataGridTextColumn Header="Бюджет (грн)" Binding="{Binding Budget, StringFormat={}{0:N0}}" Width="130" />
+                    <DataGridTextColumn Header="Стиль" Binding="{Binding Style}" Width="120" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Статус-рядок -->
+        <TextBlock Grid.Row="3"
+                   Text="{Binding StatusMessage}"
+                   Foreground="#73788C"
+                   FontSize="12"
+                   Margin="4,8,0,0"/>
+    </Grid>
+</Window>

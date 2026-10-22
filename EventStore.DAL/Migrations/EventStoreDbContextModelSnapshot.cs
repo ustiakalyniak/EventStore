@@ -17,7 +17,7 @@ namespace EventStore.DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -33,13 +33,29 @@ namespace EventStore.DAL.Migrations
                     b.Property<decimal>("Budget")
                         .HasColumnType("numeric");
 
+                    b.Property<string>("Colors")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("GuestsCount")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Style")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Wishes")
                         .IsRequired()
                         .HasColumnType("text");
 

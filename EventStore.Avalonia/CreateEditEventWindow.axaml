@@ -1,0 +1,105 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:EventStore.Avalonia.ViewModels"
+        x:Class="EventStore.Avalonia.CreateEditEventWindow"
+        x:DataType="vm:CreateEditEventViewModel"
+        Title="{Binding WindowTitle}"
+        Width="520"
+        Height="650"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        Background="#F7F8FC">
+
+    <Border Padding="24">
+        <ScrollViewer>
+            <StackPanel Spacing="14">
+                <TextBlock Text="{Binding WindowTitle}"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="#5B61D6"
+                           Margin="0,0,0,8"/>
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Назва події *" FontWeight="SemiBold" Foreground="#42475B" FontSize="13"/>
+                    <TextBox Text="{Binding Name}" Watermark="Наприклад, Ювілей Анни" Height="34"/>
+                </StackPanel>
+
+                <Grid ColumnDefinitions="*,12,*">
+                    <StackPanel Grid.Column="0" Spacing="4">
+                        <TextBlock Text="Дата *" FontWeight="SemiBold" Foreground="#42475B" FontSize="13"/>
+                        <DatePicker SelectedDate="{Binding Date}" HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Spacing="4">
+                        <TextBlock Text="Тип події *" FontWeight="SemiBold" Foreground="#42475B" FontSize="13"/>
+                        <ComboBox ItemsSource="{Binding EventTypes}"
+                                  SelectedItem="{Binding SelectedEventType}"
+                                  HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,12,*">
+                    <StackPanel Grid.Column="0" Spacing="4">
+                        <TextBlock Text="Кількість гостей *" FontWeight="SemiBold" Foreground="#42475B" FontSize="13"/>
+                        <NumericUpDown Value="{Binding GuestsCount}" Minimum="1" Maximum="5000" Increment="5" FormatString="0"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Spacing="4">
+                        <TextBlock Text="Бюджет (грн) *" FontWeight="SemiBold" Foreground="#42475B" FontSize="13"/>
+                        <NumericUpDown Value="{Binding Budget}" Minimum="500" Maximum="50000000" Increment="5000" FormatString="N0"/>
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Стиль оформлення" FontWeight="SemiBold" Foreground="#42475B" FontSize="13"/>
+                    <ComboBox ItemsSource="{Binding Styles}"
+                              SelectedItem="{Binding SelectedStyle}"
+                              HorizontalAlignment="Stretch"/>
+                </StackPanel>
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Кольори" FontWeight="SemiBold" Foreground="#42475B" FontSize="13"/>
+                    <TextBox Text="{Binding Colors}" Watermark="Пастельний, м'ятний, срібло..." Height="34"/>
+                </StackPanel>
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Особливі побажання" FontWeight="SemiBold" Foreground="#42475B" FontSize="13"/>
+                    <TextBox Text="{Binding Wishes}"
+                             Watermark="Кейтеринг без лактози, жива музика..."
+                             Height="70"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"/>
+                </StackPanel>
+
+                <TextBlock Text="{Binding ValidationError}"
+                           Foreground="#E53935"
+                           FontSize="12"
+                           TextWrapping="Wrap"
+                           IsVisible="{Binding ValidationError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,16,0,0">
+                    <Button Content="Скасувати"
+                            Command="{Binding CancelCommand}"
+                            Width="110"
+                            Height="36"
+                            Background="White"
+                            BorderBrush="#D9DDEA"
+                            BorderThickness="1"
+                            Foreground="#42475B"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"/>
+
+                    <Button Content="Зберегти"
+                            Command="{Binding SaveCommand}"
+                            Width="120"
+                            Height="36"
+                            Background="#5B61D6"
+                            Foreground="White"
+                            FontWeight="SemiBold"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+</Window>
