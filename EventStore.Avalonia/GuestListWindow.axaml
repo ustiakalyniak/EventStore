@@ -1,0 +1,141 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:EventStore.Avalonia.ViewModels"
+        x:Class="EventStore.Avalonia.GuestListWindow"
+        x:DataType="vm:GuestListViewModel"
+        Title="Список гостей"
+        Width="550" Height="720"
+        WindowStartupLocation="CenterOwner"
+        Background="#FAFAFA">
+
+    <Grid RowDefinitions="Auto, Auto, Auto, *, Auto" Margin="20">
+        
+        <!-- Заголовок і лічильник -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,12">
+            <TextBlock Text="{Binding CurrentEvent.Name}" FontSize="24" FontWeight="Bold" Foreground="#2C3E50"/>
+            <TextBlock Text="{Binding HeaderText}" FontSize="15" Foreground="#7F8C8D" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- 1. Додавання гостя (з ніжним пастельно-рожевим кольором) -->
+        <Grid Grid.Row="1" ColumnDefinitions="*, Auto" Margin="0,0,0,10">
+            <TextBox Grid.Column="0" 
+                     Text="{Binding NewGuestName}" 
+                     Watermark="Введіть ім'я та прізвище гостя..." 
+                     VerticalContentAlignment="Center"
+                     Height="36"
+                     Margin="0,0,10,0"/>
+            
+            <Button Grid.Column="1" 
+                    Command="{Binding AddGuestCommand}" 
+                    Content="Додати гостя" 
+                    Background="#FDA4AF" 
+                    Foreground="White"
+                    FontWeight="Medium"
+                    Height="36"
+                    Padding="16,0"
+                    CornerRadius="6"
+                    VerticalContentAlignment="Center"/>
+        </Grid>
+
+        <!-- 2. Блок приміток: рівні поля з однаковою шириною (*) -->
+        <Border Grid.Row="2" Background="White" CornerRadius="8" Padding="12" Margin="0,0,0,15" BoxShadow="0 2 6 0 #08000000">
+            <StackPanel Spacing="8">
+                <TextBlock Text="Примітка для гостя:" FontWeight="SemiBold" Foreground="#4B5563" FontSize="12"/>
+                
+                <!-- Використовуємо рівні колонки (*, *, Auto), щоб поля не наїжджали одне на одне -->
+                <Grid ColumnDefinitions="*, *, Auto">
+                    <ComboBox Grid.Column="0" 
+                              ItemsSource="{Binding Guests}" 
+                              SelectedItem="{Binding SelectedGuestForNote}"
+                              PlaceholderText="Оберіть гостя..."
+                              VerticalContentAlignment="Center"
+                              Height="34"
+                              Margin="0,0,8,0">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:GuestItemViewModel">
+                                <TextBlock Text="{Binding Model.Name}" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <TextBox Grid.Column="1" 
+                             Text="{Binding CurrentGuestNoteInput}" 
+                             Watermark="Алергії, побажання..." 
+                             VerticalContentAlignment="Center"
+                             Height="34"
+                             Margin="0,0,8,0"/>
+                             
+                    <Button Grid.Column="2"
+                            Command="{Binding SaveNoteCommand}"
+                            Content="Зберегти"
+                            Background="#6B7280"
+                            Foreground="White"
+                            Height="34"
+                            Padding="12,0"
+                            CornerRadius="6"
+                            VerticalContentAlignment="Center"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- 3. Список гостей із виведенням приміток -->
+        <ScrollViewer Grid.Row="3">
+            <ItemsControl ItemsSource="{Binding Guests}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="White" CornerRadius="8" Padding="12,10" Margin="0,0,0,8"
+                                BoxShadow="0 1 6 0 #10000000">
+                            <Grid ColumnDefinitions="*, Auto, Auto" VerticalAlignment="Center">
+                                <!-- Ім'я та сірий текст примітки -->
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0" Spacing="2">
+                                    <TextBlock Text="{Binding Model.Name}" 
+                                               FontSize="14" 
+                                               FontWeight="SemiBold"
+                                               Foreground="#2C3E50"/>
+                                    <TextBlock Text="{Binding Notes}" 
+                                               FontSize="12" 
+                                               Foreground="#9CA3AF" 
+                                               FontStyle="Italic"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                                
+                                <!-- Кнопка статусу RSVP -->
+                                <Button Grid.Column="1" 
+                                        Command="{Binding ToggleStatusCommand}"
+                                        Background="{Binding StatusBgColor}"
+                                        Margin="0,0,8,0"
+                                        Padding="8,4"
+                                        CornerRadius="12"
+                                        VerticalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal" Spacing="4">
+                                        <TextBlock Text="{Binding StatusIcon}" Foreground="{Binding StatusColor}" FontSize="12"/>
+                                        <TextBlock Text="{Binding StatusText}" Foreground="{Binding StatusColor}" FontWeight="Medium" FontSize="12"/>
+                                    </StackPanel>
+                                </Button>
+                                
+                                <!-- Кнопка видалення -->
+                                <Button Grid.Column="2" 
+                                        Command="{Binding DeleteCommand}"
+                                        Content="✕" 
+                                        Background="Transparent" 
+                                        Foreground="#EF4444" 
+                                        FontSize="14" 
+                                        FontWeight="Bold"
+                                        VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- Повідомлення про статус операції -->
+        <TextBlock Grid.Row="4" 
+                   Text="{Binding StatusMessage}" 
+                   Foreground="#D97706" 
+                   FontWeight="Medium" 
+                   TextWrapping="Wrap"
+                   Margin="0,8,0,0" 
+                   TextAlignment="Center"/>
+    </Grid>
+</Window>

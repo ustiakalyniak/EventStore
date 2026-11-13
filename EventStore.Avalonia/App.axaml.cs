@@ -52,7 +52,9 @@ public partial class App : Application
         services.AddDbContext<EventStoreDbContext>(options =>
             options.UseNpgsql(connectionString));
 
-        services.AddScoped<EventRepository>();
+        // ОСЬ ГОЛОВНЕ ВИПРАВЛЕННЯ: Реєструємо IEventRepository
+        services.AddScoped<IEventRepository, EventRepository>();
+
         services.AddScoped<EventService>();
         services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(Log.Logger, dispose: true));
 

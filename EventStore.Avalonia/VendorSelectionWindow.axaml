@@ -1,0 +1,51 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="EventStore.Avalonia.VendorSelectionWindow"
+        Title="Інтелектуальний підбір підрядника" Width="650" Height="450"
+        WindowStartupLocation="CenterOwner">
+    
+    <StackPanel Margin="20" Spacing="15">
+        <TextBlock Text="Рекомендовані виконавці" FontSize="22" FontWeight="Bold" Foreground="#333333"/>
+        <TextBlock Text="Алгоритм відібрав цих підрядників на основі вашого бюджету та стилю події." 
+                   FontSize="14" Foreground="#666666" TextWrapping="Wrap"/>
+        
+        <TextBlock x:Name="txtErrorMessage" Foreground="#D32F2F" FontWeight="Bold" IsVisible="False"/>
+        
+        <ListBox x:Name="lstVendors" Height="280" Background="Transparent" BorderThickness="0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="White" CornerRadius="8" Padding="15" Margin="0,0,0,10" 
+                            BoxShadow="0 2 10 0 LightGray">
+                        <Grid ColumnDefinitions="*, Auto, Auto">
+                            <StackPanel Grid.Column="0" Spacing="5">
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="18"/>
+                                <TextBlock Text="{Binding Category, StringFormat='Категорія: {0}'}" FontStyle="Italic" Foreground="#555555"/>
+                                <TextBlock Text="{Binding Style, StringFormat='Стиль: {0}'}" Foreground="#555555"/>
+                                <TextBlock Text="{Binding ContactInfo}" Foreground="#007ACC"/>
+                            </StackPanel>
+                            
+                            <!-- Виправлено форматування ціни без зайвих копійок (.00) -->
+                            <TextBlock Grid.Column="1" Text="{Binding BasePrice, StringFormat='{}{0:N0} грн'}" 
+                                       VerticalAlignment="Center" Margin="10,0,20,0" FontWeight="Bold" FontSize="16" Foreground="#2E7D32"/>
+                            
+                            <!-- Кнопка призначення -->
+                            <Button Grid.Column="2" 
+                                    Content="Призначити" 
+                                    Name="BtnAssign"
+                                    Click="OnAssignClick" 
+                                    DataContext="{Binding}" 
+                                    Background="#2E7D32" 
+                                    Foreground="White" 
+                                    FontWeight="Bold" 
+                                    VerticalAlignment="Center" 
+                                    CornerRadius="5" 
+                                    Padding="15,8"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <Button Content="Скасувати" Click="OnCancelClick" HorizontalAlignment="Center" Background="Transparent" Foreground="#666666"/>
+    </StackPanel>
+</Window>

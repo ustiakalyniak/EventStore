@@ -3,87 +3,227 @@
         xmlns:vm="using:EventStore.Avalonia.ViewModels"
         x:Class="EventStore.Avalonia.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="EventStore"
-        Height="600"
-        Width="950"
+        x:Name="Root"
+        Title="EventStore — Планування подій"
+        Height="680"
+        Width="1020"
         WindowStartupLocation="CenterScreen"
-        Background="#F7F8FC">
+        Background="#FAF7F5">
 
-    <Grid Margin="24" RowDefinitions="Auto,Auto,*,Auto">
-        <!-- Заголовок -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,16">
-            <TextBlock Text="EventStore"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       Foreground="#5B61D6"/>
-            <TextBlock Text="Керування та планування подій"
-                       FontSize="13"
-                       Foreground="#73788C"
-                       Margin="0,2,0,0"/>
-        </StackPanel>
-
-        <!-- Кнопки керування -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12" Margin="0,0,0,16">
-            <Button Content="Створити подію"
-                    Command="{Binding CreateEventCommand}"
-                    Width="160"
-                    Height="38"
-                    Background="#5B61D6"
-                    Foreground="White"
-                    FontWeight="SemiBold"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"/>
-
-            <Button Content="Редагувати обрану"
-                    Command="{Binding EditEventCommand}"
-                    Width="160"
-                    Height="38"
-                    Background="#4E5180"
-                    Foreground="White"
-                    FontWeight="SemiBold"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"/>
-
-            <Button Content="Оновити список"
-                    Command="{Binding LoadEventsCommand}"
-                    Width="140"
-                    Height="38"
-                    Background="White"
-                    BorderBrush="#D9DDEA"
-                    BorderThickness="1"
-                    Foreground="#42475B"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"/>
-        </StackPanel>
-
-        <!-- Таблиця подій -->
-        <Border Grid.Row="2"
+    <Grid RowDefinitions="Auto,*">
+        <!-- Верхня панель навігації -->
+        <Border Grid.Row="0"
                 Background="White"
-                CornerRadius="8"
-                Padding="12"
-                BorderBrush="#E3E6F0"
-                BorderThickness="1">
-            <DataGrid ItemsSource="{Binding Events}"
-                      SelectedItem="{Binding SelectedEvent}"
-                      AutoGenerateColumns="False"
-                      IsReadOnly="True"
-                      GridLinesVisibility="Horizontal">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Назва" Binding="{Binding Name}" Width="*" />
-                    <DataGridTextColumn Header="Дата" Binding="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}" Width="120" />
-                    <DataGridTextColumn Header="Тип" Binding="{Binding EventType}" Width="130" />
-                    <DataGridTextColumn Header="Гостей" Binding="{Binding GuestsCount}" Width="90" />
-                    <DataGridTextColumn Header="Бюджет (грн)" Binding="{Binding Budget, StringFormat={}{0:N0}}" Width="130" />
-                    <DataGridTextColumn Header="Стиль" Binding="{Binding Style}" Width="120" />
-                </DataGrid.Columns>
-            </DataGrid>
+                BorderBrush="#EFE7E4"
+                BorderThickness="0,0,0,1"
+                Padding="32,16">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="28" VerticalAlignment="Center">
+                    <TextBlock Text="EventStore"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="#5A2D2D"/>
+
+                    <Border BorderBrush="#5A2D2D" BorderThickness="0,0,0,2" Padding="0,0,0,4">
+                        <TextBlock Text="Мої події"
+                                   FontWeight="SemiBold"
+                                   Foreground="#5A2D2D"
+                                   FontSize="14"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Аватарка користувача -->
+                <Border Grid.Column="2"
+                        Width="36"
+                        Height="36"
+                        CornerRadius="18"
+                        Background="#F3E9E7">
+                    <TextBlock Text="УК"
+                               Foreground="#6B3A3A"
+                               FontWeight="Bold"
+                               FontSize="13"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Border>
+            </Grid>
         </Border>
 
-        <!-- Статус-рядок -->
-        <TextBlock Grid.Row="3"
-                   Text="{Binding StatusMessage}"
-                   Foreground="#73788C"
-                   FontSize="12"
-                   Margin="4,8,0,0"/>
+        <!-- Робоча область зі списком подій -->
+        <Grid Grid.Row="1" Margin="32,24" RowDefinitions="Auto,Auto,*,Auto">
+            <!-- Заголовок розділу -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,18">
+                <TextBlock Text="Ваші заплановані події"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Foreground="#2D2424"/>
+                <TextBlock Text="Створюйте нові заходи, змінюйте параметри та контролюйте бюджет і підготовку"
+                           FontSize="13"
+                           Foreground="#8C7A7A"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Кнопки керування -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12" Margin="0,0,0,16">
+                <Button Content="+ Створити подію"
+                        Command="{Binding CreateEventCommand}"
+                        Width="170"
+                        Height="40"
+                        CornerRadius="8"
+                        Background="#6B3A3A"
+                        Foreground="White"
+                        FontWeight="SemiBold"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Cursor="Hand"/>
+
+                <Button Content="Редагувати обрану"
+                        Command="{Binding EditEventCommand}"
+                        Width="160"
+                        Height="40"
+                        CornerRadius="8"
+                        Background="#F4EAE8"
+                        Foreground="#5A2D2D"
+                        BorderBrush="#E5D3CF"
+                        BorderThickness="1"
+                        FontWeight="SemiBold"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Cursor="Hand"/>
+
+                <Button Content="Видалити"
+                        Command="{Binding DeleteEventCommand}"
+                        Width="120"
+                        Height="40"
+                        CornerRadius="8"
+                        Background="#FDF2F2"
+                        Foreground="#D32F2F"
+                        BorderBrush="#F8D7DA"
+                        BorderThickness="1"
+                        FontWeight="SemiBold"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Cursor="Hand"/>
+
+                <Button Content="Оновити список"
+                        Command="{Binding LoadEventsCommand}"
+                        Width="140"
+                        Height="40"
+                        CornerRadius="8"
+                        Background="White"
+                        BorderBrush="#E8DFDC"
+                        BorderThickness="1"
+                        Foreground="#5A4E4E"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Cursor="Hand"/>
+            </StackPanel>
+
+            <!-- Таблиця подій -->
+            <Border Grid.Row="2"
+                    Background="White"
+                    CornerRadius="14"
+                    Padding="16"
+                    BorderBrush="#F3E5E8"
+                    BorderThickness="1">
+                <DataGrid ItemsSource="{Binding Events}"
+                          SelectedItem="{Binding SelectedEvent}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          GridLinesVisibility="Horizontal"
+                          HeadersVisibility="Column">
+                    <DataGrid.Columns>
+                        <!-- 1. Назва події -->
+                        <DataGridTemplateColumn Header="Назва події" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"
+                                               FontWeight="Bold"
+                                               FontSize="14"
+                                               Foreground="#2D2424"
+                                               VerticalAlignment="Center"
+                                               Margin="12,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- 2. Дата події -->
+                        <DataGridTextColumn Header="Дата"
+                                            Binding="{Binding Date, StringFormat={}{0:dd.MM.yyyy}}"
+                                            Width="120"/>
+
+                        <!-- 3. Тип події -->
+                        <DataGridTemplateColumn Header="Тип події" Width="140">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Background="#FDF2F4"
+                                            BorderBrush="#F0D5DA"
+                                            BorderThickness="1"
+                                            CornerRadius="6"
+                                            Padding="10,4"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Margin="8,0">
+                                        <TextBlock Text="{Binding EventType}"
+                                                   Foreground="#D97A88"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="12"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- 4. Прогрес готовності -->
+                        <DataGridTemplateColumn Header="Готовність" Width="130">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Background="#F7EFF1"
+                                            BorderBrush="#EBDCDF"
+                                            BorderThickness="1"
+                                            CornerRadius="6"
+                                            Padding="8,4"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Margin="8,0">
+                                        <TextBlock Text="{Binding ProgressPercentage, StringFormat='{}{0}%'}"
+                                                   Foreground="#5A2D2D"
+                                                   FontWeight="Bold"
+                                                   FontSize="12"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- 5. Кнопка переходу до плану заходу -->
+                        <DataGridTemplateColumn Header="План" Width="140">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="План заходу →"
+                                            Command="{Binding #Root.DataContext.OpenPlanCommand}"
+                                            CommandParameter="{Binding}"
+                                            Background="#FDF2F4"
+                                            Foreground="#D97A88"
+                                            BorderBrush="#F0D5DA"
+                                            BorderThickness="1"
+                                            CornerRadius="8"
+                                            Padding="10,5"
+                                            FontWeight="Bold"
+                                            FontSize="12"
+                                            Cursor="Hand"
+                                            VerticalAlignment="Center"
+                                            Margin="4,0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!-- Статус-рядок -->
+            <TextBlock Grid.Row="3"
+                       Text="{Binding StatusMessage}"
+                       Foreground="#8C7A7A"
+                       FontSize="12"
+                       Margin="4,10,0,0"/>
+        </Grid>
     </Grid>
 </Window>

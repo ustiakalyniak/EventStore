@@ -1,0 +1,69 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="EventStore.Avalonia.FinanceWindow"
+        Title="Фінансовий облік події" Width="720" SizeToContent="Height"
+        WindowStartupLocation="CenterScreen"
+        Background="#FCF6F6">
+    
+    <StackPanel Margin="20" Spacing="12">
+        <TextBlock FontSize="20" FontWeight="Bold" Text="Фінансовий дашборд" Foreground="#333333"/>
+        
+        <!-- Блок попередження -->
+        <Border Name="BudgetWarningPanel" Background="#FFF8E1" BorderBrush="#FFE082" BorderThickness="1" CornerRadius="8" Padding="10" IsVisible="False">
+            <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <TextBlock Text="⚠️" FontSize="16" VerticalAlignment="Center"/>
+                <TextBlock Name="txtWarningMessage" Text="Увага! Сума фактичних оплат перевищує загальний бюджет події. Рекомендуємо оптимізувати витрати." 
+                           FontSize="12" FontWeight="SemiBold" Foreground="#B7791F" VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="600"/>
+            </StackPanel>
+        </Border>
+
+        <Border Background="#F9F9F9" BorderBrush="LightGray" BorderThickness="1" CornerRadius="8" Padding="12">
+            <Grid ColumnDefinitions="*, *">
+                <StackPanel Grid.Column="0" Spacing="6">
+                    <TextBlock FontWeight="Bold" Name="txtTotalBudget" Text="Бюджет: 0 грн"/>
+                    <TextBlock Name="txtPlannedCost" Text="Заплановано витрат: 0 грн"/>
+                    <TextBlock Name="txtActuallyPaid" Text="Фактично оплачено: 0 грн"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Spacing="6">
+                    <TextBlock FontWeight="Bold" Foreground="#E65100" Name="txtRemainingToPay" Text="Залишок до сплати: 0 грн"/>
+                    <TextBlock FontWeight="Bold" Foreground="#2E7D32" Name="txtLeftoverBudget" Text="Вільний залишок: 0 грн"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TextBlock FontWeight="Bold" Margin="0,2,0,0" Text="Зафіксувати нову оплату" Name="txtInputHeader"/>
+        
+        <Grid ColumnDefinitions="2*, *, 2*, Auto, Auto" Margin="0,0,0,2">
+            <ComboBox Grid.Column="0" Margin="0,0,10,0" x:Name="cmbPlanItems" 
+                      PlaceholderText="Оберіть завдання..." 
+                      DisplayMemberBinding="{Binding Title}" 
+                      SelectedValueBinding="{Binding Id}"/>
+            <TextBox Grid.Column="1" Margin="0,0,10,0" Name="txtAmount" Watermark="Сума (грн)"/>
+            <TextBox Grid.Column="2" Margin="0,0,10,0" Name="txtNote" Watermark="Примітка (напр. Аванс)"/>
+            <Button Background="#007ACC" Click="OnSubmitTransactionClick" Content="Додати оплату" Foreground="White" FontWeight="Bold" CornerRadius="8" Padding="15,6" Grid.Column="3" Name="btnSubmitTransaction" Cursor="Hand"/>
+            <Button Background="#8C7A7A" Click="OnCancelEditClick" Content="Скасувати" Foreground="White" FontWeight="Bold" CornerRadius="8" Padding="12,6" Grid.Column="4" Name="btnCancelEdit" IsVisible="False" Margin="10,0,0,0" Cursor="Hand"/>
+        </Grid>
+
+        <TextBlock Foreground="Red" IsVisible="False" Name="txtErrorMessage" TextWrapping="Wrap"/>
+
+        <TextBlock FontWeight="Bold" Text="Історія платежів"/>
+        
+        <!-- Задаємо невелику фіксовану висоту (наприклад, 130), і всередині неї історія буде чудово скролитися без жодного зайвого простору знизу вікна -->
+        <ListBox Background="White" Height="130" Name="lstTransactions">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="80, 90, *, Auto">
+                        <TextBlock Grid.Column="0" Text="{Binding TransactionDate, StringFormat='{}{0:dd.MM.yyyy}'}" VerticalAlignment="Center"/>
+                        <TextBlock FontWeight="Bold" Foreground="Green" Grid.Column="1" Text="{Binding Amount, StringFormat='{}{0} грн'}" VerticalAlignment="Center"/>
+                        <TextBlock FontStyle="Italic" Grid.Column="2" Text="{Binding Note}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,10,0"/>
+                        
+                        <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                            <Button Content="✎" FontSize="12" Padding="8,4" Background="#FFF3E0" Foreground="#E65100" CornerRadius="4" Cursor="Hand" Click="OnEditTransactionClick"/>
+                            <Button Content="❌" FontSize="12" Padding="8,4" Background="#FCEAEB" Foreground="#DC7684" CornerRadius="4" Cursor="Hand" Click="OnDeleteTransactionClick"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
+</Window>

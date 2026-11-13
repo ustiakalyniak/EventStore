@@ -1,4 +1,7 @@
-﻿namespace EventStore.DAL.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace EventStore.DAL.Models;
 
 /// <summary>
 /// Represents an event entity.
@@ -49,4 +52,19 @@ public class Event
     /// Gets or sets additional wishes for the event.
     /// </summary>
     public string Wishes { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the preparation progress percentage (from 0 to 100).
+    /// </summary>
+    public int ProgressPercentage { get; set; } = 0;
+
+    /// <summary>
+    /// Gets or sets the collection of plan items associated with this event.
+    /// </summary>
+    public List<PlanItem> PlanItems { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets the collection of guests associated with this event.
+    /// </summary>
+    public List<Guest> Guests { get; set; } = new();
 }

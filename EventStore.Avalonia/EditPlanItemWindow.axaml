@@ -1,0 +1,56 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="EventStore.Avalonia.EditPlanItemWindow"
+        Title="Оптимізація та вибір альтернативи" Width="650" Height="520"
+        WindowStartupLocation="CenterOwner"
+        Background="#FCF6F6">
+    
+    <StackPanel Margin="20" Spacing="15">
+        <TextBlock x:Name="TitleTxt" FontSize="20" FontWeight="Bold" Foreground="#333333"/>
+        <TextBlock Text="Оберіть оптимальний формат послуги для бюджету вашої події:" 
+                   FontSize="13" Foreground="#666666" TextWrapping="Wrap"/>
+        
+        <TextBlock x:Name="ErrorTxt" Foreground="#D32F2F" FontWeight="Bold" IsVisible="False"/>
+        
+        <ListBox x:Name="AlternativesList" Height="340" Background="Transparent" BorderThickness="0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="White" CornerRadius="8" Padding="15" Margin="0,0,0,10" 
+                            BoxShadow="0 2 10 0 #08000000" BorderBrush="#F0F0F0" BorderThickness="1">
+                        <Grid ColumnDefinitions="*, Auto, Auto" VerticalAlignment="Center">
+                            <!-- Інформація -->
+                            <StackPanel Grid.Column="0" Spacing="3" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="14" Foreground="#333333"/>
+                                <TextBlock Text="{Binding Description}" FontSize="11" Foreground="#888888" TextWrapping="Wrap" MaxWidth="320"/>
+                            </StackPanel>
+                            
+                            <!-- Ціна та бейдж економії -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="15,0" HorizontalAlignment="Right" Spacing="3">
+                                <TextBlock Text="{Binding Price, StringFormat='{}{0:N0} грн'}" 
+                                           FontWeight="Bold" FontSize="15" Foreground="#333333" HorizontalAlignment="Right"/>
+                                <Border Background="{Binding BadgeBg}" CornerRadius="4" Padding="6,2" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding BadgeText}" FontSize="10" Foreground="{Binding BadgeFg}" FontWeight="Bold"/>
+                                </Border>
+                            </StackPanel>
+                            
+                            <!-- Кнопка вибору -->
+                            <Button Grid.Column="2" 
+                                    Content="Обрати" 
+                                    Click="OnSelectAlternativeClick" 
+                                    DataContext="{Binding}"
+                                    Background="#8C5C5C" 
+                                    Foreground="White" 
+                                    FontWeight="Bold" 
+                                    VerticalAlignment="Center" 
+                                    CornerRadius="6" 
+                                    Padding="10,6"
+                                    Cursor="Hand"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <Button Content="Скасувати" Click="OnCancelClick" HorizontalAlignment="Center" Background="Transparent" Foreground="#666666" Cursor="Hand"/>
+    </StackPanel>
+</Window>
